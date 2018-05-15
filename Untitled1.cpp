@@ -1,147 +1,167 @@
-#include<stdio.h>
-#include<string.h>
-#define SIZE 100
-
-typedef struct member{
-	char name[51];
-	int age;
+#include <conio.h>
+#include <stdio.h>
+#include <string.h>
+struct member{
 	int ID;
-	int group_ID;
-} ;
+	char name[50];
+	int age;
+	int group_id;
+};
 typedef struct member member;
-void check()
-{
-	
-}
+member MB[200];
+int Num_Of_Mem = 0;
 
-void input(member *tv)
-{
-	printf("Nhap vao so hieu thanh vien: ");
-	scanf("%d", &tv->ID);
-	while (getchar()!='\n');
-	printf("Nhap vao ten thanh vien: ");
-	gets(tv->name);
-	printf("Nhap vao tuoi cua thanh vien: ");
-	scanf("%d", &tv->age);
-	while (getchar()!='\n');
-	printf("Nhap vao group_ID: ");
-	scanf("%d", &tv->group_ID);
-	while (getchar()!='\n');
-}
+void Insert_member();
 
-void output(member *tv)
-{
-	printf("%-35s\t%-7d\t%-5d\t%-9d\n",tv->name, tv->age, tv->ID, tv->group_ID);
-}
+void Edit_member_info();
 
-int find(member *tv, char *ten)
-{
-	int count=-1;
-	while (strcmp(tv->name, ten)!=0);
- 	{
-	tv++;
-	count ++;
-	}
-	return count;
-}
+void showMenu();
 
-void del(member *tv)
-{
-	strcpy(tv->name, (tv+1)->name);
-	tv->age=(tv+1)->age;
-	tv->group_ID=(tv+1)->group_ID;
-	tv->ID=(tv+1)->ID;
-}                 
+void Del_member();
 
-void edit(member *tv)
-{
-	printf("Nhap lai so hieu thanh vien: ");
-	scanf("%d", &tv->ID);
-	while (getchar()!='\n');
-	printf("Nhap lai ten thanh vien: ");
-	gets(tv->name);
-	do{printf("Nhap lai tuoi cua thanh vien: ");
-	scanf("%d", &tv->age);
-	while (getchar()!='\n');
-	if((tv->age<0)&&(tv->age>100)) printf("Nhap lai so tuoi!\n");
-	}
-	while((tv->age<0)&&(tv->age>110));
-	printf("Nhap lai group_ID: ");
-	scanf("%d", &tv->group_ID);
-	while (getchar()!='\n');	
-}
+void Show_list_member();
+
+void Arrange();
+
 int main()
+
 {
-	char hoten[51];
-	member tv[SIZE];
-	int stt,i;
-	char choice;
-	//Menu
-	printf("Chuong trinh quan ly thanh vien doi SVTN vien CNTT&TT: \n");
-	do{
-	printf("Menu: \n");
-	printf("1. Nhap vao thong tin thanh vien\n");
-	printf("2. In thong tin thanh vien\n");
-	printf("3. Them thanh vien\n");
-	printf("4. Tim kiem thong tin thanh vien\n");
-	printf("5. Xoa thanh vien\n");
-	printf("6. Chinh sua thong tin thanh vien\n");
-	printf("7. Thoat\n");
-	printf("Moi ban nhap vao lua chon: ");
-	scanf("%c", &choice);
-	while(getchar()!='\n');
-	switch (choice)
-	{
-		case '1': printf("Nhap vao thong tin thanh vien\n");
-			printf("Nhap vao so thanh vien nhap vao: ");
-			scanf("%d", &stt);
-			while (getchar()!='\n');
-			for (i=0; i<stt; i++)
-				{printf("Nhap vao thong tin thanh vien thu %d\n", i+1);
-				input(&tv[i]);}
-			printf("\n");
-			break;
-		case '2': printf("In thong tin thanh vien\n");
-			int i;
-			printf("%-35s\t%-7s\t%-5s\t%-9s\n", "Ho ten", "Tuoi", "ID", "Group_ID");
-			for (i=0; i<stt; i++)
-			output(&tv[i]);
-			printf("\n");
-			break;
-		case '3': printf("Them thanh vien\n");
-			stt++;
-			input(&tv[stt-1]);
-			printf("\n");
-			break;
-		case '4': printf("Tim kiem thong tin thanh vien\n");
-			printf("Nhap vao ten thanh vien can tim: ");
-			gets(hoten);
-			printf("%-35s\t%-7s\t%-5s\t%-9s\n", "Ho ten", "Tuoi", "ID", "Group_ID");
-			output(&tv[find( tv, hoten)]); 
-			printf("\n");
-			break;
-		case '5': printf("Xoa thanh vien:\n");
-			printf("Nhap vao ten thanh vien can xoa: ");
-			gets(hoten);
-			int num;
-			stt--;
-			num=find(tv, hoten);
-			for (i=num; i<stt;i++)
-				del(&tv[i]);
-			printf("Da xoa thanh vien!\n");
-			printf("\n");
-			break;
-		case '6': printf("Chinh sua thong tin thanh vien:\n"); 
-			printf("Nhap ten thanh vien can sua thong tin: ");
-			gets(hoten);
-			num=find(tv, hoten);
-			edit(&tv[num]);
-			printf("Da sua xong thong tin thanh vien! \n");
-			printf("\n");
-			break;
-		case '7': printf("Ban da chon che do thoat khoi chuong trinh!\n"); break;
-		default:  printf("Moi ban nhap lai lua chon tu 1 den 7!\n"); break;
+
+    char ch;
+	while(1){
+		system("cls");
+		showMenu();
+		fflush(stdin);
+		ch = getch();
+		if(ch == '1') Insert_member();
+		else if(ch == '2') Edit_member_info();
+		else if(ch == '3') Show_list_member();
+		else if(ch == '4') Del_member();
+		else if(ch == '5') Arrange();
+		else
+		{
+			fflush(stdin);
+			printf("\n chan roi a ? Y/N");
+			ch = getch();
+			if(ch == 'Y' || ch == 'y') break;
+		}
 	}
-		}while (choice!='7');
+	//xuatFile();
 	return 0;
 }
+
+
+void showMenu(){
+	printf("\n CHUONG TRINH QUAN LY THANH VIEN DOI\n ");
+		printf("\n       =========MENU========= ");
+		printf("\n 	1. Bo sung danh sach");
+		printf("\n 	2. Sua chua thong tin");
+		printf("\n 	3. In danh sach");
+		printf("\n 	4. Xoa thanh vien");
+		printf("\n 	5. Sap xep danh sach");
+		printf("\n 	Bam 1-5 de chon, phim bat ki de ket thuc\n");
+}
+
+void Insert_member(){
+	while(1){
+        printf("nguoi thu %d :\n", Num_Of_Mem + 1);
+        printf("Nhap ID: ");
+        scanf("%d",&MB[Num_Of_Mem].ID);
+        if(MB[Num_Of_Mem].ID == '\0' || MB[Num_Of_Mem].ID == '\n') break;
+        printf("\nHo va ten: ");
+        fflush(stdin);
+        gets(MB[Num_Of_Mem].name);
+        printf("\nTuoi:");
+        scanf("%d", &MB[Num_Of_Mem].age);
+        printf("\nGroup ID: ");
+        scanf("%d", &MB[Num_Of_Mem].group_id);
+        Num_Of_Mem++;
+    }
+}
+
+
+void Edit_member_info(){
+    printf("\nNhap ID cua thanh vien can sua:");
+    int ID_edit;
+    scanf("%d", &ID_edit);
+    int flag=0;// bien kiem tra xem co tim thay hay khong
+    for(int i = 0; i < Num_Of_Mem; i++){
+        if(MB[i].ID == ID_edit) {
+            flag = 1;
+            char ch;
+            printf("\nban muon sua thong tin: ");
+            printf("\n1. Ho va ten");
+            printf("\n2. Tuoi");
+            printf("\n3. Nhom");
+            ch = getch();
+            while(ch != '1' || ch != '2' || ch != '3'){
+                printf("\nmoi ban nhap lai!");
+                ch = getch();
+            }
+            char Temp_name[50];
+            int Temp_int;
+            switch(ch){
+                case '1':
+
+                    fflush(stdin);
+                    gets(Temp_name);
+                    strcpy(MB[i].name, Temp_name);
+                    break;
+                case '2':
+
+                    scanf("%d", &Temp_int);
+                    MB[i].age = Temp_int;
+                    break;
+                default:
+                    scanf("%d", &Temp_int);
+                    MB[i].group_id = Temp_int;
+                }
+
+        }
+    }
+    if(flag == 0) printf("Khong tim thay thanh vien nay");
+}
+
+void Show_list_member(){
+
+    if(Num_Of_Mem == 0) printf("\nChua co thanh vien nao!");
+    else
+    {   int stt = 1;
+        printf("\n===DANH SACH THANH VIEN===\n");
+        printf("\tSTT\t|\tID\t\t|\tHo ten\t\t\t|\tTuoi\t|\tGroup\n");
+        for(int i = 0; i < Num_Of_Mem; i++){
+            printf("\t%d\t|\t%d\t\t|\t%s\t\t\t|\t%d\t|\t%d\n", stt, MB[i].ID, MB[i].name, MB[i].age, MB[i].group_id);
+        }
+        getch();
+    }
+}
+
+void Del_member(){
+    Show_list_member();
+    printf("nhap ID cua thanh vien can xoa: ");
+    int Temp_id;
+    scanf("%d", Temp_id);
+    for(int i = 0; i < Num_Of_Mem; i++){
+        if(MB[i].ID == Temp_id){
+            for(int j = i; j < Num_Of_Mem; j++){
+                MB[j].ID = MB[j + 1].ID;
+                printf("flag");
+                
+                strcpy(MB[j].name, MB[j + 1].name);
+                printf("flag");
+                MB[j].age = MB[j + 1].age;
+                MB[j].group_id = MB[j + 1].group_id;
+            }
+            printf("flag");
+            Num_Of_Mem--;
+            break;
+        }
+    }
+    printf("flag");
+    getch();
+}
+
+void Arrange(){
+
+}
+

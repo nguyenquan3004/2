@@ -9,6 +9,10 @@ typedef struct member{
 	int group_ID;
 } ;
 typedef struct member member;
+void check()
+{
+	
+}
 
 void input(member *tv)
 {
